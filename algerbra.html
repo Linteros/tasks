@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Домашние задания: степени, корни, уравнения</title>
+    <!-- MathJax для точного отображения формул (LaTeX) -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        /* Обнуление внешних отступов для iframe */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f1f5f9;
+            padding: 20px;
+            color: #0f172a;
+        }
+
+        /* главный контейнер — компактный, без лишних теней для iframe */
+        .iframe-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            padding: 20px 24px 32px 24px;
+        }
+
+        h1 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 6px;
+            color: #0f172a;
+            border-left: 5px solid #3b82f6;
+            padding-left: 18px;
+        }
+
+        .subhead {
+            color: #334155;
+            margin-bottom: 28px;
+            padding-left: 23px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #e9edf2;
+            padding-bottom: 12px;
+        }
+
+        .tasks-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .task-card {
+            background: #ffffff;
+            border-radius: 24px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+
+        .task-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e9edf2;
+        }
+
+        .task-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: #1e293b;
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 40px;
+            color: white;
+            letter-spacing: -0.2px;
+        }
+
+        .btn-answer {
+            background: #3b82f6;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 7px 22px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-answer:hover {
+            background: #2563eb;
+            transform: scale(0.97);
+        }
+
+        .task-question {
+            padding: 18px 22px 12px 22px;
+            font-size: 1rem;
+            line-height: 1.5;
+            background: #ffffff;
+            border-bottom: 1px dashed #eef2f6;
+        }
+
+        .task-question p {
+            margin-bottom: 8px;
+        }
+
+        .solution-area {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+            background: #fefce8;
+            border-top: 1px solid transparent;
+        }
+
+        .solution-area.show {
+            max-height: 2000px;
+            border-top-color: #fde047;
+        }
+
+        .solution-content {
+            padding: 18px 22px;
+            background: #fffbeb;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            color: #422006;
+        }
+
+        .solution-content br {
+            margin-bottom: 4px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 32px;
+            font-size: 0.7rem;
+            color: #5b6e8c;
+            border-top: 1px solid #eef2f6;
+            padding-top: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .iframe-container {
+                padding: 14px;
+            }
+            .task-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .btn-answer {
+                width: 100%;
+                justify-content: center;
+                text-align: center;
+            }
+        }
+
+        /* для формул — небольшие отступы */
+        mjx-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="iframe-container">
+    <h1>📚 Домашние задания</h1>
+    <div class="subhead">Степени, корни, уравнения — нажмите «Посмотреть ответ» для проверки решения</div>
+    <div class="tasks-grid" id="tasksContainer"></div>
+    <footer>Все формулировки и решения — точно по условиям из методических материалов.</footer>
+</div>
+
+<script>
+    // ============================================================
+    // ЗАДАНИЯ ИЗ "ДЗ_Степени_и_корни.pdf" (Задания 1–12)
+    // ============================================================
+    const tasksStepeniKorni = [
+        {
+            title: "Задание 1",
+            question: "Найдите значение выражения \\(\\frac{\\sqrt[3]{a} \\cdot \\sqrt[4]{a}}{a \\sqrt[12]{a}}\\) при \\(a = 6,25\\).",
+            solution: "Выполним преобразования:<br><br>\\[ \\frac{\\sqrt[3]{a} \\cdot \\sqrt[4]{a}}{a \\sqrt[12]{a}} = \\frac{a^{\\frac{1}{3}} \\cdot a^{\\frac{1}{4}}}{a \\cdot a^{\\frac{1}{12}}} = a^{\\frac{1}{3} + \\frac{1}{4} - 1 - \\frac{1}{12}} = a^{\\frac{4}{12} + \\frac{3}{12} - \\frac{12}{12} - \\frac{1}{12}} = a^{-\\frac{1}{2}} = \\frac{1}{\\sqrt{a}} = \\frac{1}{\\sqrt{6,25}} = \\frac{1}{2,5} = 0,4. \\]<br><strong>ОТВЕТ: 0,4.</strong>"
+        },
+        {
+            title: "Задание 2",
+            question: "Найдите \\(\\frac{a + 9b + 16}{a + 3b + 8}\\), если \\(\\frac{a}{b} = 3\\).",
+            solution: "Из условия \\(\\frac{a}{b} = 3\\) находим, что \\(a = 3b\\), и подставляем в дробь:<br><br>\\[ \\frac{a + 9b + 16}{a + 3b + 8} = \\frac{3b + 9b + 16}{3b + 3b + 8} = \\frac{12b + 16}{6b + 8} = \\frac{4(3b + 4)}{2(3b + 4)} = 2. \\]<br><strong>ОТВЕТ: 2.</strong>"
+        },
+        {
+            title: "Задание 3",
+            question: "Найдите значение выражения \\(\\frac{4^{5,1}}{8^{2,4}}\\).",
+            solution: "По свойствам степеней имеем:<br><br>\\[ \\frac{4^{5,1}}{8^{2,4}} = \\frac{2^{10,2}}{2^{7,2}} = 2^{10,2-7,2} = 2^3 = 8. \\]<br><strong>ОТВЕТ: 8.</strong>"
+        },
+        {
+            title: "Задание 4",
+            question: "Найдите значение выражения \\(\\frac{\\sqrt[4]{9} \\cdot \\sqrt[4]{36}}{\\sqrt[4]{4}}\\).",
+            solution: "Выполним преобразования:<br><br>\\[ \\frac{\\sqrt[4]{9} \\cdot \\sqrt[4]{36}}{\\sqrt[4]{4}} = \\frac{\\sqrt[4]{9} \\cdot \\sqrt[4]{9 \\cdot 4}}{\\sqrt[4]{4}} = \\sqrt[4]{9 \\cdot 9 \\cdot 4} = \\sqrt[4]{9 \\cdot 9} = \\sqrt[4]{3 \\cdot 3 \\cdot 3 \\cdot 3} = \\sqrt[4]{3^4} = 3. \\]<br><strong>ОТВЕТ: 3.</strong>"
+        },
+        {
+            title: "Задание 5",
+            question: "Найдите значение выражения \\(\\frac{g(x+2)}{g(x)}\\), если \\(g(x)=15^x\\).",
+            solution: "Из условия получаем, что \\(g(x+2) = 15^{x+2}\\). Подставим в исходное выражение:<br><br>\\[ \\frac{g(x+2)}{g(x)} = \\frac{15^{x+2}}{15^{x}} = 15^{2} = 225. \\]<br><strong>ОТВЕТ: 225.</strong>"
+        },
+        {
+            title: "Задание 6",
+            question: "Найдите значение выражения \\(2^{4,4} \\cdot 6^{7,4} / 12^{6,4}\\).",
+            solution: "Выполним преобразования, приводя к основаниям 2 и 3:<br><br>\\[ 2^{4,4} \\cdot (2 \\cdot 3)^{7,4} / (2^2 \\cdot 3)^{6,4} = 2^{4,4+7,4-12,8} \\cdot 3^{7,4-6,4} = 2^{-1} \\cdot 3^{1} = \\frac{3}{2} = 1,5. \\]<br><strong>ОТВЕТ: 1,5.</strong>"
+        },
+        {
+            title: "Задание 7",
+            question: "Найдите \\(p(x) + p(6 - x)\\), если \\(p(x) = \\frac{x(6 - x)}{x - 3}\\) при \\(x \\neq 3\\).",
+            solution: "Выполним преобразования:<br><br>\\[ p(x) + p(6 - x) = \\frac{x(6 - x)}{x - 3} + \\frac{(6 - x)(6 - (6 - x))}{(6 - x) - 3} = \\frac{x(6 - x)}{x - 3} + \\frac{x(6 - x)}{3 - x} = \\frac{x(6 - x)}{x - 3} - \\frac{x(6 - x)}{x - 3} = 0. \\]<br><strong>ОТВЕТ: 0.</strong>"
+        },
+        {
+            title: "Задание 8",
+            question: "Найдите значение выражения \\(\\frac{12\\sqrt{2\\sqrt{a}} - 4\\sqrt{2\\sqrt{a}}}{4\\sqrt{2\\sqrt{a}}}\\) при \\(a>0\\).",
+            solution: "Выполним преобразования:<br><br>\\[ \\frac{12\\sqrt{2\\sqrt{a}} - 4\\sqrt{2\\sqrt{a}}}{4\\sqrt{2\\sqrt{a}}} = \\frac{8\\sqrt{2\\sqrt{a}}}{4\\sqrt{2\\sqrt{a}}} = \\frac{8}{4} = 2. \\]<br><strong>ОТВЕТ: 2.</strong>"
+        },
+        {
+            title: "Задание 9",
+            question: "Найдите значение выражения \\(\\left(\\frac{5^{\\frac{1}{2}} \\cdot 5^{\\frac{1}{3}}}{\\sqrt{5}}\\right)^3\\).",
+            solution: "Выполним преобразования:<br><br>\\[ \\left(\\frac{5^{\\frac{1}{2}} \\cdot 5^{\\frac{1}{3}}}{\\sqrt{5}}\\right)^3 = \\left(5^{\\frac{1}{2} + \\frac{1}{3} - \\frac{1}{2}}\\right)^3 = \\left(5^{\\frac{1}{3}}\\right)^3 = 5^1 = 5. \\]<br><strong>ОТВЕТ: 5.</strong>"
+        },
+        {
+            title: "Задание 10",
+            question: "Найдите \\(p(x) + p(6 - x)\\), если \\(p(x) = \\frac{x(6 - x)}{x - 3}\\) при \\(x \\neq 3\\).",
+            solution: "Выполним преобразования:<br><br>\\[ p(x) + p(6 - x) = \\frac{x(6 - x)}{x - 3} + \\frac{(6 - x)(6 - (6 - x))}{(6 - x) - 3} = \\frac{x(6 - x)}{x - 3} + \\frac{x(6 - x)}{3 - x} = \\frac{x(6 - x)}{x - 3} - \\frac{x(6 - x)}{x - 3} = 0. \\]<br><strong>ОТВЕТ: 0.</strong>"
+        },
+        {
+            title: "Задание 11",
+            question: "Найдите значение выражения \\(\\frac{12\\sqrt{2\\sqrt{a}} - 4\\sqrt{2\\sqrt{a}}}{4\\sqrt{2\\sqrt{a}}}\\) при \\(a>0\\).",
+            solution: "Выполним преобразования:<br><br>\\[ \\frac{12\\sqrt{2\\sqrt{a}} - 4\\sqrt{2\\sqrt{a}}}{4\\sqrt{2\\sqrt{a}}} = \\frac{8\\sqrt{2\\sqrt{a}}}{4\\sqrt{2\\sqrt{a}}} = \\frac{8}{4} = 2. \\]<br><strong>ОТВЕТ: 2.</strong>"
+        },
+        {
+            title: "Задание 12",
+            question: "Найдите значение выражения \\(\\left(\\frac{5^{\\frac{1}{2}} \\cdot 5^{\\frac{1}{3}}}{\\sqrt{5}}\\right)^3\\).",
+            solution: "Выполним преобразования:<br><br>\\[ \\left(\\frac{5^{\\frac{1}{2}} \\cdot 5^{\\frac{1}{3}}}{\\sqrt{5}}\\right)^3 = \\left(5^{\\frac{1}{2} + \\frac{1}{3} - \\frac{1}{2}}\\right)^3 = \\left(5^{\\frac{1}{3}}\\right)^3 = 5^1 = 5. \\]<br><strong>ОТВЕТ: 5.</strong>"
+        }
+    ];
+
+    // ============================================================
+    // ЗАДАНИЯ ИЗ "ДЗ_Модуль_Уравнения_задания_6_9_13.pdf" (3–9)
+    // ============================================================
+    const tasksEquations = [
+        {
+            title: "Задание 3",
+            question: "Камнеметательная машина выстреливает камни под некоторым острым углом к горизонту. Траектория полета камня описывается формулой \\(y = ax^2 + bx\\), где \\(a = -\\frac{1}{100}\\) м⁻¹, \\(b = 1\\) – постоянные параметры, \\(x\\) (м) – смещение камня по горизонтали, \\(y\\) (м) – высота камня над землей. На каком наибольшем расстоянии (в метрах) от крепостной стены высотой 8 м нужно расположить машину, чтобы камни пролетали над стеной на высоте не менее 1 метра?",
+            solution: "Задача сводится к решению неравенства \\(y \\ge 9\\) при заданных значениях параметров \\(a\\) и \\(b\\):<br><br>\\[ y \\ge 9 \\Leftrightarrow -\\frac{1}{100}x^2 + x \\ge 9 \\Leftrightarrow x^2 - 100x + 900 \\le 0 \\Leftrightarrow 10 \\le x \\le 90 \\text{ м}. \\]<br><br>Камни будут перелетать крепостную стену на высоте не менее 1 метра, если камнеметательная машина будет находиться на расстоянии от 10 до 90 метров от этой стены. Наибольшее расстояние — 90 метров.<br><br><strong>ОТВЕТ: 90.</strong>"
+        },
+        {
+            title: "Задание 4",
+            question: "Для нагревательного элемента некоторого прибора экспериментально была получена зависимость температуры (в кельвинах) от времени работы: \\(T(t) = T_0 + bt + at^2\\), где \\(t\\) — время в минутах, \\(T_0 = 1350\\) К, \\(a = -7,5\\) К/мин², \\(b = 105\\) К/мин. Известно, что при температуре нагревателя свыше 1650 К прибор может испортиться, поэтому его нужно отключить. Определите, через какое наибольшее время после начала работы нужно отключить прибор. Ответ выразите в минутах.",
+            solution: "Найдем, в какой момент времени после начала работы температура станет равной 1650 К. Задача сводится к решению уравнения \\(T(t) = 1650\\) при заданных значениях параметров \\(a\\) и \\(b\\):<br><br>\\[ 1350 + 105t - 7,5t^2 = 1650 \\Leftrightarrow t^2 - 14t + 40 = 0 \\Leftrightarrow \\begin{cases} t = 4, \\\\ t = 10. \\end{cases} \\]<br><br>Через 4 минуты после включения прибор нагреется до 1650 К, и при дальнейшем нагревании может испортиться. Таким образом, прибор нужно выключить через 4 минуты.<br><br><strong>ОТВЕТ: 4.</strong>"
+        },
+        {
+            title: "Задание 5",
+            question: "Независимое агентство намерено ввести рейтинг новостных интернет-изданий на основе оценок информативности \\(In\\), оперативности \\(Op\\), объективности публикаций \\(Tr\\), а также качества сайта \\(Q\\). Каждый отдельный показатель оценивается читателями по 5-балльной шкале целыми числами от 1 до 5.<br><br>Аналитики, составляющие формулу рейтинга, считают, что объективность ценится втрое, а информативность публикаций — вдвое дороже, чем оперативность и качество сайта. Таким образом, формула приняла вид<br><br>\\[ R = \\frac{2In + Op + 3Tr + Q}{A}. \\]<br><br>Каким должно быть число \\(A\\), чтобы издание, у которого все оценки наибольшие, получило бы рейтинг 1?",
+            solution: "Поскольку показатели максимальны, они равны 5. Подставим значения в формулу:<br><br>\\[ 1 = \\frac{10 + 5 + 15 + 5}{A} \\Leftrightarrow A = 35. \\]<br><br><strong>ОТВЕТ: 35.</strong>"
+        },
+        {
+            title: "Задание 6",
+            question: "Локатор батискафа, равномерно погружающегося вертикально вниз, испускает ультразвуковые импульсы частотой 749 МГц. Скорость погружения батискафа вычисляется по формуле \\(v = c \\cdot \\frac{f - f_0}{f + f_0}\\), где \\(c = 1500\\) м/с — скорость звука в воде, \\(f_0\\) — частота испускаемых импульсов, \\(f\\) — частота отраженного от дна сигнала, регистрируемая приемником (в МГц). Определите частоту отраженного сигнала в МГц, если скорость погружения батискафа равна 2 м/с.",
+            solution: "Задача сводится к решению уравнения \\(v = 2\\) м/с при известных значениях \\(c = 1500\\) м/с и \\(f_0 = 749\\) МГц:<br><br>\\[ v = 2 \\Leftrightarrow 1500 \\cdot \\frac{f - 749}{f + 749} = 2 \\Leftrightarrow 750 \\cdot \\frac{f - 749}{f + 749} = 1 \\Leftrightarrow \\]<br>\\[ \\Leftrightarrow 750f - 750 \\cdot 749 = f + 749 \\Leftrightarrow 749f = 749 \\cdot 751 \\Leftrightarrow f = 751 \\text{ МГц}. \\]<br><br><strong>ОТВЕТ: 751.</strong>"
+        },
+        {
+            title: "Задание 7",
+            question: "Если достаточно быстро вращать ведерко с водой на веревке в вертикальной плоскости, то вода не будет выливаться. При вращении ведерка сила давления воды на дно не остается постоянной: она максимальна в нижней точке и минимальна в верхней. Вода не будет выливаться, если сила ее давления на дно будет положительной во всех точках траектории, кроме верхней, где она может быть равной нулю. В верхней точке сила давления, выраженная в ньютонах, равна \\(P = m\\left(\\frac{v^2}{L} - g\\right)\\), где \\(m\\) — масса воды в килограммах, \\(v\\) — скорость движения ведерка в м/с, \\(L\\) — длина веревки в метрах, \\(g\\) — ускорение свободного падения (считайте \\(g = 10\\) м/с²). С какой наименьшей скоростью надо вращать ведерко, чтобы вода не выливалась, если длина веревки равна 44,1 см? Ответ выразите в м/с.",
+            solution: "Задача сводится к решению неравенства \\(P(v) \\ge 0\\) при заданной длине веревки \\(L = 0,441\\) м:<br><br>\\[ P(v) \\ge 0 \\Leftrightarrow m\\left(\\frac{v^2}{L} - g\\right) \\ge 0 \\Leftrightarrow \\frac{v^2}{0,441} - 10 \\ge 0 \\Leftrightarrow v^2 \\ge 4,41 \\Leftrightarrow v \\ge 2,1 \\text{ м/с}. \\]<br><br><strong>ОТВЕТ: 2,1.</strong>"
+        },
+        {
+            title: "Задание 8",
+            question: "К источнику с ЭДС \\(\\varepsilon = 75\\) В и внутренним сопротивлением \\(r = 0,4\\) Ом, хотят подключить нагрузку с сопротивлением \\(R\\) Ом. Напряжение на этой нагрузке, выражаемое в вольтах, дается формулой \\(U = \\frac{\\varepsilon R}{R + r}\\). При каком наименьшем значении сопротивления нагрузки напряжение на ней будет не менее 60 В? Ответ выразите в омах.",
+            solution: "Задача сводится к решению неравенства \\(U \\ge 60\\) В при известных значениях \\(r = 0,4\\) Ом, \\(\\varepsilon = 75\\) В:<br><br>\\[ U \\ge 60 \\Leftrightarrow \\frac{75R}{R + 0,4} \\ge 60 \\Leftrightarrow R \\ge 1,6 \\text{ Ом}. \\]<br><br>Таким образом, наименьшее значение сопротивления нагрузки равно 1,6 Ом.<br><br><strong>ОТВЕТ: 1,6.</strong>"
+        },
+        {
+            title: "Задание 9",
+            question: "а) Решите уравнение \\(\\sqrt{x^3 + 4x^2 + 9} - 3 = x\\).<br><br>б) Найдите все корни этого уравнения, принадлежащие отрезку \\(\\left[-\\frac{9}{2}; \\frac{7}{5}\\right]\\).",
+            solution: "<strong>Решение</strong><br><br>а) Запишем уравнение в виде \\(\\sqrt{x^3 + 4x^2 + 9} = x + 3\\). ОДЗ: \\(x + 3 \\ge 0 \\Rightarrow x \\ge -3\\).<br><br>Возведём в квадрат:<br><br>\\[ x^3 + 4x^2 + 9 = x^2 + 6x + 9 \\]<br>\\[ x^3 + 3x^2 - 6x = 0 \\]<br>\\[ x(x^2 + 3x - 6) = 0 \\]<br><br>Корни: \\(x_1 = 0\\), \\(x_{2,3} = \\frac{-3 \\pm \\sqrt{9 + 24}}{2} = \\frac{-3 \\pm \\sqrt{33}}{2}\\).<br><br>Проверка ОДЗ и подстановка в исходное уравнение:<br>- \\(x = 0\\): \\(\\sqrt{9} - 3 = 3 - 3 = 0\\) — подходит.<br>- \\(x = \\frac{-3 + \\sqrt{33}}{2} \\approx 1,372\\): \\(x+3 > 0\\), подстановка даёт верное равенство — подходит.<br>- \\(x = \\frac{-3 - \\sqrt{33}}{2} \\approx -4,372\\): \\(x+3 < 0\\) — не удовлетворяет ОДЗ, посторонний корень.<br><br>б) Отрезок \\(\\left[-\\frac{9}{2}; \\frac{7}{5}\\right] = [-4,5; 1,4]\\).<br>\\(x = 0\\) принадлежит отрезку.<br>\\(\\frac{-3 + \\sqrt{33}}{2} \\approx 1,372 \\le 1,4\\) — принадлежит отрезку.<br><br><strong>ОТВЕТ: а) \\(0,\\; \\frac{-3 + \\sqrt{33}}{2}\\); б) \\(0,\\; \\frac{-3 + \\sqrt{33}}{2}\\).</strong>"
+        }
+    ];
+
+    // Объединяем: сначала все задания из степеней/корней (12), потом из уравнений (7)
+    const allTasks = [...tasksStepeniKorni, ...tasksEquations];
+
+    const container = document.getElementById('tasksContainer');
+
+    function renderTasks() {
+        container.innerHTML = '';
+        allTasks.forEach((task, idx) => {
+            const card = document.createElement('div');
+            card.className = 'task-card';
+
+            const header = document.createElement('div');
+            header.className = 'task-header';
+            const titleSpan = document.createElement('span');
+            titleSpan.className = 'task-title';
+            titleSpan.innerText = task.title;
+            const btn = document.createElement('button');
+            btn.className = 'btn-answer';
+            btn.innerText = '📘 Посмотреть ответ';
+
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'task-question';
+            const qBody = document.createElement('div');
+            qBody.innerHTML = task.question;
+            questionDiv.appendChild(qBody);
+
+            const solutionBlock = document.createElement('div');
+            solutionBlock.className = 'solution-area';
+            const solutionInner = document.createElement('div');
+            solutionInner.className = 'solution-content';
+            solutionInner.innerHTML = task.solution;
+            solutionBlock.appendChild(solutionInner);
+
+            header.appendChild(titleSpan);
+            header.appendChild(btn);
+            card.appendChild(header);
+            card.appendChild(questionDiv);
+            card.appendChild(solutionBlock);
+            container.appendChild(card);
+
+            btn.addEventListener('click', () => {
+                const isOpen = solutionBlock.classList.contains('show');
+                if (isOpen) {
+                    solutionBlock.classList.remove('show');
+                    btn.innerText = '📘 Посмотреть ответ';
+                } else {
+                    solutionBlock.classList.add('show');
+                    btn.innerText = '🙈 Скрыть решение';
+                }
+            });
+        });
+
+        if (window.MathJax) {
+            MathJax.typesetPromise();
+        }
+    }
+
+    renderTasks();
+</script>
+</body>
+</html>
